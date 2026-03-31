@@ -1,0 +1,29 @@
+resources:
+  jobs:
+    products_job:
+      name: products_job
+      trigger:
+        periodic:
+          interval: 1
+          unit: DAYS
+      parameters:
+        - name: catalog
+          default: ${var.catalog}
+        - name: schema
+          default: ${var.schema}
+
+      tasks:
+        - task_key: refresh_pipeline
+          pipeline_task:
+            pipeline_id: ${resources.pipelines.products_etl.id}
+      environments:
+        - environment_key: Default
+          spec:
+            environment_version: "4"
+      notification_settings:
+        no_alert_for_skipped_runs: true
+      email_notifications:
+        on_failure:
+          - nishanty@gmail.com
+      queue:
+        enabled: true
